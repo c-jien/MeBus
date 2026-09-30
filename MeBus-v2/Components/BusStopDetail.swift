@@ -73,7 +73,7 @@ struct BusStopDetailView: View {
         isLoading = true
         errorMessage = nil
         
-        let urlString = "https://YOUR API HERE" //put address to api here, must be https
+        let urlString = "https://your-api.example.com/bus-arrival/\(busStopCode)" // Replace with your own HTTPS backend.
         guard let url = URL(string: urlString) else {
             self.errorMessage = "Invalid URL"
             self.isLoading = false

@@ -1,6 +1,12 @@
+import os
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
+
+account_key = os.environ.get("LTA_ACCOUNT_KEY", "").strip()
+if not account_key:
+    raise RuntimeError("Set LTA_ACCOUNT_KEY before starting the API.")
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -8,9 +14,9 @@ CORS(app)  # Enable CORS
 
 def get_bus_arrival_data(bus_stop_code):
     """ Function to fetch bus arrival data from the specified API using a bus stop code """
-    url = f"http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode={bus_stop_code}"
+    url = f"https://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode={bus_stop_code}"
     headers = {
-        'AccountKey': 'Cd1meRZJTR6xuMO6B8NNjw== '
+        'AccountKey': account_key
     }
     response = requests.get(url, headers=headers)
     return response.json()  # Return the JSON response directly
@@ -24,4 +30,4 @@ def bus_arrival(code):
     return jsonify(data)  # Use jsonify to ensure response is application/json
 
 if __name__ == '__main__':
-    app.run(debug=True, port=6001)  # Run the application in debug mode
+    app.run(port=6001)
